@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "name": "Галактический бургер",
+  "order": {
+    "_id": "9876543210abcdef12345678",
+    "ingredients": [
+      "60d3b41abdacab0026a733c6",
+      "60d3b41abdacab0026a733c8"
+    ],
+    "status": "done",
+    "name": "Галактический бургер",
+    "owner": {
+      "name": "TestUser",
+      "email": "testuser@yandex.ru",
+      "createdAt": "2025-05-01T10:00:00.000Z",
+      "updatedAt": "2025-06-01T12:00:00.000Z"
+    },
+    "price": 1234,
+    "createdAt": "2025-06-28T14:20:00.000Z",
+    "updatedAt": "2025-06-28T14:21:00.000Z",
+    "number": 424242,
+    "__v": 0
+  }
+}
