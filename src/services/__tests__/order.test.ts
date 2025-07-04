@@ -16,7 +16,7 @@ describe('Редьюсер слайса order', () => {
     name: 'Галактический бургер',
     createdAt: '2025-06-28T14:20:00.000Z',
     updatedAt: '2025-06-28T14:21:00.000Z',
-    number: 424242,
+    number: 424242
   };
 
   it('При вызове createOrder.pending устанавливается orderRequest = true', () => {
@@ -36,7 +36,10 @@ describe('Редьюсер слайса order', () => {
 
   it('При вызове createOrder.rejected сохраняется ошибка и orderRequest = false', () => {
     const error = 'Ошибка при создании заказа';
-    const action = { type: createOrder.rejected.type, error: { message: error } };
+    const action = {
+      type: createOrder.rejected.type,
+      error: { message: error }
+    };
     const state = reducer(initialState, action);
     expect(state.orderRequest).toBe(false);
     expect(state.error).toBe(error);
@@ -50,7 +53,10 @@ describe('Редьюсер слайса order', () => {
   });
 
   it('При вызове fetchOrderByNumber.fulfilled сохраняются данные заказа и orderRequest = false', () => {
-    const action = { type: fetchOrderByNumber.fulfilled.type, payload: mockOrder };
+    const action = {
+      type: fetchOrderByNumber.fulfilled.type,
+      payload: mockOrder
+    };
     const state = reducer(initialState, action);
     expect(state.orderRequest).toBe(false);
     expect(state.orderModalData).toEqual(mockOrder);
@@ -58,7 +64,10 @@ describe('Редьюсер слайса order', () => {
 
   it('При вызове fetchOrderByNumber.rejected сохраняется ошибка и orderRequest = false', () => {
     const error = 'Ошибка загрузки заказа';
-    const action = { type: fetchOrderByNumber.rejected.type, error: { message: error } };
+    const action = {
+      type: fetchOrderByNumber.rejected.type,
+      error: { message: error }
+    };
     const state = reducer(initialState, action);
     expect(state.orderRequest).toBe(false);
     expect(state.error).toBe(error);
@@ -69,7 +78,7 @@ describe('Редьюсер слайса order', () => {
       ...initialState,
       order: mockOrder,
       orderModalData: mockOrder,
-      error: 'Ошибка',
+      error: 'Ошибка'
     };
     const state = reducer(prevState, clearOrder());
     expect(state.order).toBeNull();
@@ -86,7 +95,7 @@ describe('Редьюсер слайса order', () => {
   it('clearOrderModalData очищает orderModalData', () => {
     const prevState = {
       ...initialState,
-      orderModalData: mockOrder,
+      orderModalData: mockOrder
     };
     const state = reducer(prevState, clearOrderModalData());
     expect(state.orderModalData).toBeNull();

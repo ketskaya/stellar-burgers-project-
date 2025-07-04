@@ -19,45 +19,60 @@ describe('Страница конструктора бургеров', () => {
     cy.wait('@getUser');
   });
 
+  afterEach(() => {
+    cy.clearLocalStorage();
+    cy.clearCookies();
+  });
+
   it('Показывает заголовок конструктора', () => {
     cy.contains('Соберите бургер').should('be.visible');
   });
 
   it('Добавляет булку в конструктор', () => {
-    cy.get(`[data-cy="ingredient-${BUN_ID}"]`)
-      .contains('Добавить')
-      .click();
+  cy.get('[data-cy="burger-constructor"]').as('constructor');
 
-    cy.get('[data-cy="burger-constructor"]').as('constructor');
+  cy.get('@constructor')
+    .find('[data-cy="constructor-bun-top"]')
+    .should('not.exist');
+  cy.get('@constructor')
+    .find('[data-cy="constructor-bun-bottom"]')
+    .should('not.exist');
 
-    cy.get('@constructor')
-      .find('[data-cy="constructor-bun-top"]')
-      .should('contain', `${BUN_NAME} (верх)`);
+  cy.get(`[data-cy="ingredient-${BUN_ID}"]`)
+    .contains('Добавить')
+    .click();
 
-    cy.get('@constructor')
-      .find('[data-cy="constructor-bun-bottom"]')
-      .should('contain', `${BUN_NAME} (низ)`);
+  cy.get('@constructor')
+    .find('[data-cy="constructor-bun-top"]')
+    .should('contain', `${BUN_NAME} (верх)`);
+  cy.get('@constructor')
+    .find('[data-cy="constructor-bun-bottom"]')
+    .should('contain', `${BUN_NAME} (низ)`);
 
-    cy.get(`[data-cy="ingredient-${BUN_ID}"]`)
-      .find('.counter')
-      .should('contain', '2')
-      .and('be.visible');
+  cy.get(`[data-cy="ingredient-${BUN_ID}"]`)
+    .find('.counter')
+    .should('contain', '2')
+    .and('be.visible');
   });
 
-  it('Добавляет начинку в конструктор', () => {
-    cy.get(`[data-cy="ingredient-${MAIN_ID}"]`)
-      .contains('Добавить')
-      .click();
+it('Добавляет начинку в конструктор', () => {
+  cy.get('[data-cy="burger-constructor"]').as('constructor');
 
-    cy.get('[data-cy="burger-constructor"]').as('constructor');
+  cy.get('@constructor')
+    .find(`[data-cy="constructor-ingredient-${MAIN_ID}"]`)
+    .should('not.exist');
 
-    cy.get('@constructor')
-      .find(`[data-cy="constructor-ingredient-${MAIN_ID}"]`)
-      .should('exist');
+  cy.get(`[data-cy="ingredient-${MAIN_ID}"]`)
+    .contains('Добавить')
+    .click();
 
-    cy.get(`[data-cy="ingredient-${MAIN_ID}"]`)
-      .find('.counter')
-      .should('contain', '1');
+  cy.get('@constructor')
+    .find(`[data-cy="constructor-ingredient-${MAIN_ID}"]`)
+    .should('exist');
+
+  cy.get(`[data-cy="ingredient-${MAIN_ID}"]`)
+    .find('.counter')
+    .should('contain', '1');
   });
 
   describe('Модальное окно ингредиента', () => {
@@ -66,6 +81,8 @@ describe('Страница конструктора бургеров', () => {
 
       cy.get('[data-cy="modal"]').should('be.visible');
 
+      cy.get('[data-cy="modal"]').should('contain', BUN_NAME);
+      
       cy.get('[data-cy="modal-close"]').click();
       cy.get('[data-cy="modal"]').should('not.exist');
     });
@@ -88,10 +105,14 @@ describe('Страница конструктора бургеров', () => {
 
       cy.contains('Оформить заказ').click();
 
-      cy.wait('@createOrder');
+      cy.wait('@createOrder').its('response.statusCode').should('eq', 200);
 
-      cy.get('[data-cy="modal"]').should('be.visible');
-      cy.get('[data-cy="order-number"]').should('contain', /\d+/);
+      cy.get('[data-cy="modal"]').as('modalRoot').should('be.visible');
+      cy.fixture('order.json').then(orderFixture => {
+        cy.get('@modalRoot')
+          .find('[data-cy="order-number"]')
+          .should('contain', orderFixture.order.number.toString());
+      });
 
       cy.get('[data-cy="modal-close"]').click();
       cy.get('[data-cy="modal"]').should('not.exist');

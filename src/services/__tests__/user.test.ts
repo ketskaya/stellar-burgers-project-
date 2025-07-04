@@ -8,7 +8,7 @@ import reducer, {
   setAuthChecked,
   clearUserErrors,
   setUser,
-  setAuthenticated,
+  setAuthenticated
 } from '../slices/user';
 
 import { TUser } from '@utils-types';
@@ -16,7 +16,7 @@ import { TUser } from '@utils-types';
 describe('Редьюсер слайса user', () => {
   const mockUser: TUser = {
     email: 'usermeow@yandex.ru',
-    name: 'UserMeow',
+    name: 'UserMeow'
   };
 
   it('При вызове registerUser.pending устанавливается registerUserRequest = true', () => {
@@ -37,7 +37,10 @@ describe('Редьюсер слайса user', () => {
 
   it('При вызове registerUser.rejected сохраняется ошибка, registerUserRequest = false', () => {
     const error = 'Ошибка регистрации';
-    const action = { type: registerUser.rejected.type, error: { message: error } };
+    const action = {
+      type: registerUser.rejected.type,
+      error: { message: error }
+    };
     const state = reducer(initialState, action);
     expect(state.registerUserRequest).toBe(false);
     expect(state.registerUserError).toBe(error);
@@ -107,7 +110,7 @@ describe('Редьюсер слайса user', () => {
       ...initialState,
       user: mockUser,
       isAuthenticated: true,
-      isAuthChecked: false,
+      isAuthChecked: false
     };
     const action = { type: logoutUser.fulfilled.type };
     const state = reducer(stateWithUser, action);
@@ -126,7 +129,7 @@ describe('Редьюсер слайса user', () => {
     const stateWithErrors = {
       ...initialState,
       loginUserError: 'Ошибка входа',
-      registerUserError: 'Ошибка регистрации',
+      registerUserError: 'Ошибка регистрации'
     };
     const action = clearUserErrors();
     const state = reducer(stateWithErrors, action);

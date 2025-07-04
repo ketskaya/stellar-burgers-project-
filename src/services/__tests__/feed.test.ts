@@ -1,4 +1,8 @@
-import reducer, { fetchFeeds, fetchUserOrders, initialState } from '../slices/feed';
+import reducer, {
+  fetchFeeds,
+  fetchUserOrders,
+  initialState
+} from '../slices/feed';
 import { TOrder } from '@utils-types';
 
 describe('Редьюсер слайса feed', () => {
@@ -9,13 +13,13 @@ describe('Редьюсер слайса feed', () => {
     name: 'Галактический бургер',
     createdAt: '2025-06-28T14:20:00.000Z',
     updatedAt: '2025-06-28T14:21:00.000Z',
-    number: 424242,
+    number: 424242
   };
 
   const mockFeedPayload = {
     orders: [mockOrder],
     total: 1000,
-    totalToday: 50,
+    totalToday: 50
   };
 
   it('При вызове fetchFeeds.pending устанавливается loading = true', () => {
@@ -26,7 +30,10 @@ describe('Редьюсер слайса feed', () => {
   });
 
   it('При вызове fetchFeeds.fulfilled записываются заказы и связанные данные, loading = false', () => {
-    const action = { type: fetchFeeds.fulfilled.type, payload: mockFeedPayload };
+    const action = {
+      type: fetchFeeds.fulfilled.type,
+      payload: mockFeedPayload
+    };
     const state = reducer(initialState, action);
     expect(state.loading).toBe(false);
     expect(state.orders).toEqual(mockFeedPayload.orders);
@@ -51,7 +58,10 @@ describe('Редьюсер слайса feed', () => {
   });
 
   it('При вызове fetchUserOrders.fulfilled записываются заказы и loading = false', () => {
-    const action = { type: fetchUserOrders.fulfilled.type, payload: [mockOrder] };
+    const action = {
+      type: fetchUserOrders.fulfilled.type,
+      payload: [mockOrder]
+    };
     const state = reducer(initialState, action);
     expect(state.loading).toBe(false);
     expect(state.orders).toEqual([mockOrder]);

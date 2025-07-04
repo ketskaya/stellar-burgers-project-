@@ -7,7 +7,7 @@ type ConstructorState = {
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: ConstructorState = {
+export const initialState: ConstructorState = {
   bun: null,
   ingredients: []
 };
@@ -38,6 +38,10 @@ const constructorSlice = createSlice({
       action: PayloadAction<{ from: number; to: number }>
     ) => {
       const { from, to } = action.payload;
+      const length = state.ingredients.length;
+      if (from < 0 || from >= length || to < 0 || to >= length || from === to) {
+        return;
+      }
       const ingredient = state.ingredients[from];
       state.ingredients.splice(from, 1);
       state.ingredients.splice(to, 0, ingredient);
